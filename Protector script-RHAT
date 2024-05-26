@@ -1,0 +1,120 @@
+script made by RHAT_localplayrer
+
+
+Protecter gui press leftshift to make it reapper/dissaper
+
+this is for the RHATS
+
+tutorial on it:
+enter someones name in the first textbox (the person you wanna protect)
+enter the teleport speed
+the teleport radius
+and the 2nd teleport radius, or dont add a 2nd and make it the same as the first teleport radius
+ok anyway heres the script
+local Player = game.Players.LocalPlayer
+local UIS = game:GetService("UserInputService")
+
+-- Create GUI Elements
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UsernameBox = Instance.new("TextBox")
+local SpeedBox = Instance.new("TextBox")
+local RadiusBox1 = Instance.new("TextBox")
+local RadiusBox2 = Instance.new("TextBox")
+local ProtectButton = Instance.new("TextButton")
+
+-- Set up the GUI
+ScreenGui.Parent = Player.PlayerGui
+ScreenGui.ResetOnSpawn = false
+
+Frame.Size = UDim2.new(0, 400, 0, 250)
+Frame.Position = UDim2.new(0.5, -200, 0.5, -125)
+Frame.BackgroundColor3 = Color3.new(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+
+UsernameBox.Size = UDim2.new(0, 200, 0, 50)
+UsernameBox.Position = UDim2.new(0.5, -100, 0.1, 0)
+UsernameBox.PlaceholderText = "Enter Username"
+UsernameBox.Parent = Frame
+
+SpeedBox.Size = UDim2.new(0, 200, 0, 50)
+SpeedBox.Position = UDim2.new(0.5, -100, 0.25, 0)
+SpeedBox.PlaceholderText = "Enter Speed"
+SpeedBox.Parent = Frame
+
+RadiusBox1.Size = UDim2.new(0, 200, 0, 50)
+RadiusBox1.Position = UDim2.new(0.5, -100, 0.4, 0)
+RadiusBox1.PlaceholderText = "Enter Teleport Radius 1"
+RadiusBox1.Parent = Frame
+
+RadiusBox2.Size = UDim2.new(0, 200, 0, 50)
+RadiusBox2.Position = UDim2.new(0.5, -100, 0.55, 0)
+RadiusBox2.PlaceholderText = "Enter Teleport Radius 2"
+RadiusBox2.Parent = Frame
+
+ProtectButton.Size = UDim2.new(0, 150, 0, 50)
+ProtectButton.Position = UDim2.new(0.5, -75, 0.8, 0)
+ProtectButton.Text = "Protect Off"
+ProtectButton.Parent = Frame
+
+-- Variables to control the spinning
+local protecting = false
+local targetPlayer
+local speed = 3 -- Default speed
+local radius1 = 45 -- Default radius 1
+local radius2 = 40 -- Default radius 2
+local isRadius1 = true -- Flag to determine which radius to use
+
+-- Function to start/stop the protect mode
+ProtectButton.MouseButton1Click:Connect(function()
+    protecting = not protecting
+    if protecting then
+        ProtectButton.Text = "Protect On"
+        -- Get target player
+        local username = UsernameBox.Text
+        targetPlayer = game.Players:FindFirstChild(username)
+        if not targetPlayer then
+            warn("Player not found!")
+            protecting = false
+            ProtectButton.Text = "Protect Off"
+            return
+        end
+        -- Get speed
+        speed = tonumber(SpeedBox.Text) or 3
+        -- Get radii
+        radius1 = tonumber(RadiusBox1.Text) or 45
+        radius2 = tonumber(RadiusBox2.Text) or 40
+    else
+        ProtectButton.Text = "Protect Off"
+    end
+end)
+
+-- Function to toggle the GUI visibility with left shift
+UIS.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.LeftShift then
+        ScreenGui.Enabled = not ScreenGui.Enabled
+    end
+end)
+
+-- Function to continuously spin around the target player
+game:GetService("RunService").Stepped:Connect(function()
+    if protecting then
+        if targetPlayer then
+            local targetPosition = targetPlayer.Character and targetPlayer.Character.HumanoidRootPart.Position
+            if targetPosition then
+                local playerPosition = Player.Character and Player.Character.HumanoidRootPart.Position
+                if playerPosition then
+                    local newPosition
+                    if isRadius1 then
+                        newPosition = targetPosition + Vector3.new(radius1 * math.cos(tick() * speed), 0, radius1 * math.sin(tick() * speed))
+                    else
+                        newPosition = targetPosition + Vector3.new(radius2 * math.cos(tick() * speed), 0, radius2 * math.sin(tick() * speed))
+                    end
+                    Player.Character:SetPrimaryPartCFrame(CFrame.new(newPosition))
+                    isRadius1 = not isRadius1
+                end
+            end
+        end
+    end
+end)
