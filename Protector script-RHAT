@@ -11,6 +11,11 @@ enter the teleport speed
 the teleport radius
 and the 2nd teleport radius, or dont add a 2nd and make it the same as the first teleport radius
 ok anyway heres the script
+
+-- -----------------------------
+
+-- COPY HERE
+
 local Player = game.Players.LocalPlayer
 local UIS = game:GetService("UserInputService")
 
