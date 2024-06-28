@@ -1,0 +1,197 @@
+-- ok so this is ez to understand (idk if it works i think it does)
+
+-- animation player put in a animation id and u do it
+
+-- ok anyway here it is (it has preset animations btw
+
+
+-- --------------
+
+-- COPY HERE
+ 
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "AnimationGui"
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create the Frame
+local frame = Instance.new("Frame")
+frame.Name = "MainFrame"
+frame.Size = UDim2.new(0, 300, 0, 400)
+frame.Position = UDim2.new(0.5, -150, 0.5, -200)
+frame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+frame.Visible = false
+frame.Parent = screenGui
+
+-- Create the TextBox
+local textBox = Instance.new("TextBox")
+textBox.Name = "AnimationTextBox"
+textBox.Size = UDim2.new(0, 280, 0, 50)
+textBox.Position = UDim2.new(0, 10, 0, 10)
+textBox.PlaceholderText = "Enter Animation ID"
+textBox.Parent = frame
+
+-- Create the Preset Button
+local presetButton = Instance.new("TextButton")
+presetButton.Name = "PresetButton"
+presetButton.Size = UDim2.new(0, 280, 0, 50)
+presetButton.Position = UDim2.new(0, 10, 0, 70)
+presetButton.Text = "Preset Animations"
+presetButton.Parent = frame
+
+-- Create the ScrollFrame for Preset Animations
+local scrollFrame = Instance.new("ScrollingFrame")
+scrollFrame.Name = "PresetScrollFrame"
+scrollFrame.Size = UDim2.new(0, 280, 0, 250)
+scrollFrame.Position = UDim2.new(0, 10, 0, 130)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 1.5, 0)
+scrollFrame.Parent = frame
+
+-- Preset animations
+local animations = {
+    ["Wave"] = "128777973",
+    ["Point"] = "128853357",
+    ["Cheer"] = "129423030",
+    ["Laugh"] = "129423131",
+    ["Walk"] = "180426354",
+    ["IDLE"] = "180435571",
+    ["Fallin"] = "180436148",
+    ["Jump"] = "125750702",
+    ["Lunge"] = "129967478",
+    ["Sit"] = "178130996",
+    ["Barrel Roll"] = "136801964",
+    ["Crouch"] = "287325678",
+    ["Weird"] = "248336677",
+    ["nolegs"] = "248336459",
+    ["Poseit"] = "248336163",
+    ["PlungerThrow"] = "259438880",
+    ["Slap"] = "273717479",
+    ["LayBetter"] = "282574440",
+    ["Look"] = "283119655",
+    ["Tilt head"] = "283545583",
+    ["Kickboard"] = "160737244",
+    ["Sit2"] = "168138731",
+    ["SCREAM1"] = "180611870",
+    ["take a dunki"] = "182724289",
+    ["Lay down"] = "182749109",
+    ["Happi Dance Walk"] = "248335946",
+    ["FloatingHead"] = "121572214",
+    ["BALLOON 02"] = "148840371",
+    ["BALLOONFLOAT"] = "148831003",
+    ["SmellyRun"] = "30235165",
+    ["BigSwordHit"] = "27441775",
+    ["GOAL"] = "28488254",
+    ["Trident Stab"] = "30704021",
+    ["HoldStaff"] = "27758613",
+    ["UpperCut"] = "28160593",
+    ["scared"] = "180612465",
+    ["StaffUp"] = "27432691",
+    ["StaffSpin"] = "27763939",
+    ["Partyanimate"] = "33796059",
+    ["PimpSlap"] = "30188122",
+    ["Dance"] = "27789359",
+    ["TwoHandSwing"] = "32659706",
+    ["TwohandSword"] = "27432559",
+    ["BarrelThrow"] = "31020869",
+    ["BearHug"] = "27432686",
+    ["SwrdSwinJump"] = "32659699",
+    ["WalkStaff"] = "27759788",
+    ["Moonwalk"] = "30196114",
+    ["SoccerWalk"] = "28440069",
+    ["HeadThrow"] = "35154961",
+    ["Beatbox"] = "45504977",
+    ["Stanky Legs"] = "87986341",
+    ["Taunt"] = "74901237",
+    ["FrisbThrow"] = "174347769",
+    ["BarrelRoll"] = "136801964",
+    ["MaceSwing"] = "168801331",
+    ["idek taunt"] = "168744201",
+    ["GrenadeLoop"] = "168160500",
+    ["FireBreath"] = "163209885",
+    ["CymbalSlam"] = "162250536",
+    ["Hold dat"] = "161268368",
+    ["Bow Reload"] = "159934882",
+    ["Hold dat 2"] = "225975820",
+    ["Keyframeloop"] = "54144120",
+    ["StartRest6"] = "75416338",
+    ["Roar"] = "75354915",
+    ["SimpleSlash"] = "74799600",
+    ["Summon"] = "93693205",
+    ["ZombieAttack"] = "180416148",
+    ["ZombieIdle"] = "183294396",
+    ["Test1"] = "54145508",
+    ["Superman"] = "160725720",
+    ["Drink"] = "163203876",
+    ["GravitySlam"] = "33169573",
+    ["SoccerKick"] = "28458752",
+    ["Slash"] = "28090109",
+    ["SwordThrust"] = "32659703",
+    ["Drink/Salute"] = "28492456",
+    ["Trident Stab"] = "30704021",
+    ["Fire Wall"] = "32326246",
+    ["KickBack"] = "33686061",
+    ["Chop"] = "33169596",
+    ["Launch Hand"] = "33323745",
+    ["TridentThrow"] = "30704030",
+    ["Saxtest"] = "30257281",
+    ["Slingshot"] = "33248324",
+    ["Hornblow"] = "29349343",
+    ["Throw"] = "28604759",
+    ["StaffDuoHit"] = "27763344",
+    ["FireRing"] = "32326245"
+}
+
+-- Function to play animation
+local function playAnimation(animationId)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    
+    local animation = Instance.new("Animation")
+    animation.AnimationId = "http://www.roblox.com/asset/?id=" .. animationId
+    
+    local animationTrack = humanoid:LoadAnimation(animation)
+    animationTrack:Play()
+end
+
+-- Create buttons for each preset animation
+local buttonHeight = 30
+local yPos = 0
+for name, id in pairs(animations) do
+    local button = Instance.new("TextButton")
+    button.Name = name
+    button.Size = UDim2.new(0, 260, 0, buttonHeight)
+    button.Position = UDim2.new(0, 10, 0, yPos)
+    button.Text = name
+    button.Parent = scrollFrame
+
+    button.MouseButton1Click:Connect(function()
+        playAnimation(id)
+    end)
+
+    yPos = yPos + buttonHeight + 5
+end
+
+-- Toggle GUI visibility
+local function toggleGui()
+    frame.Visible = not frame.Visible
+end
+
+-- Connect the "K" key to toggle the GUI
+local UserInputService = game:GetService("UserInputService")
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.K then
+        toggleGui()
+    end
+end)
+
+-- Connect TextBox input to play animation
+textBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local animationId = textBox.Text
+        playAnimation(animationId)
+    end
+end)
+
+presetButton.MouseButton1Click:Connect(function()
+    scrollFrame.Visible = not scrollFrame.Visible
+end)
