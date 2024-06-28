@@ -1,0 +1,97 @@
+-- heres the tutiroal
+
+-- so press 5 to switch from it being enabled or disabled (use hero hunter for this btw)
+
+-- press 6 once to switch to the HELPER guru (i think i havent used this in a while)
+
+-- oh right lemme explain the first guru so bassicly flowing water will tp you to the void and kill the person that u hit it on (this kills u to)
+
+-- then the second ability (leathel whirlwind) webby smashes them in a way (kinda not really tho) (it like sends you into the sky which kidna does)
+
+-- now the helper first ability sends anyone you hit with it to the saferoom. (top of the map)
+
+
+-- THE INSTAKILL GURU. so this guru whenever you hit one it will take a second but its instakill it tp's them to the shadow realm void.
+
+-- 3 is a lil glitchy i forgor what most of it does cuz i havent in a while,
+
+-- --------------------------------------------------------------
+
+-- COPY HERE
+
+-- Modify the InputBegan event handler to include the new functionality for pressing "3"
+userInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.Five then
+        toggleVoid()
+    elseif input.KeyCode == Enum.KeyCode.Six then
+        togglePlatformMode()
+        toggleAlternateMode()
+    elseif input.KeyCode == Enum.KeyCode.Seven then
+        toggleSecondAlternateMode()
+        if secondAlternateMode then
+            togglePlatformMode() -- Return to normal mode
+            toggleAlternateMode()
+        end
+    elseif input.KeyCode == Enum.KeyCode.Eight then
+        toggleThirdAlternateMode()
+        if thirdAlternateMode then
+            togglePlatformMode() -- Return to normal mode
+            toggleAlternateMode()
+            toggleSecondAlternateMode()
+        end
+    elseif voidOn then
+        if thirdAlternateMode then
+            if input.KeyCode == Enum.KeyCode.One then
+                thirdAlternateForm()
+            end
+        elseif secondAlternateMode then
+            if input.KeyCode == Enum.KeyCode.Two then
+                oldPosition = player.Character.HumanoidRootPart.Position
+                wait(0.6)
+                teleportTo(Vector3.new(0, 0, 0), 0)
+                wait(0.0001)
+                for _ = 1, 6000 do
+                    wait(0.0001)
+                    teleportTo(Vector3.new(0, 100000, 0), 0)
+                end
+                wait(0.6)
+                teleportTo(Vector3.new(10000, 260, 0), 0)
+                wait(0.0001)
+                for _ = 1, 4000 do
+                    wait(0.0001)
+                    teleportTo(Vector3.new(0, 260, 10000), 0)
+                end
+                teleportTo(Vector3.new(0, 1000, 0), 0)
+            end
+        elseif alternateMode then
+            if input.KeyCode == Enum.KeyCode.One then
+                wait(0.6)
+                teleportTo(Vector3.new(315, 671, 430), 0)
+            elseif input.KeyCode == Enum.KeyCode.Two then
+                oldPosition = player.Character.HumanoidRootPart.Position
+                local platformPosition = Vector3.new(0, 10000, 0)
+                local platform = createPlatform(platformPosition, Vector3.new(500, 1, 500))
+                teleportTo(platformPosition, 0.6)
+                wait(0.1) -- Wait for 0.1 seconds before teleporting
+                teleportTo(Vector3.new(0, 90, 0), 0)
+                wait(0.18) -- Wait for 0.18 seconds before teleporting again
+                teleportTo(oldPosition + Vector3.new(0, 100, 0), 0)
+            elseif input.KeyCode == Enum.KeyCode.Three then
+                teleportToSavedPosition()  -- Call the function when "3" is pressed
+            end
+        else
+            if input.KeyCode == Enum.KeyCode.One then
+                oldPosition = player.Character.HumanoidRootPart.Position
+                local platformPosition = Vector3.new(0, 10000, 0)
+                local platform = createPlatform(platformPosition, Vector3.new(500, 1, 500))
+                teleportTo(platformPosition, 0.6)
+                wait(0.1) -- Wait for 0.1 seconds before teleporting
+                teleportTo(Vector3.new(0, 90, 0), 0)
+                wait(0.18) -- Wait for 0.18 seconds before teleporting again
+                teleportTo(oldPosition + Vector3.new(0, 100, 0), 0)
+            elseif input.KeyCode == Enum.KeyCode.Two then
+                teleportTo(Vector3.new(0, 0, 0), 0.9)
+            end
+        end
+    end
+end)
